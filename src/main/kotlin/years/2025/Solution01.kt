@@ -6,9 +6,7 @@ import kotlin.math.abs
 
 object Solution01 : Solution<List<Int>>(AOC_YEAR, 1) {
     override fun getInput(handler: InputHandler) = handler.getInput("\n") {
-        it.replace('L', '-')
-            .replace('R', '+')
-            .toInt()
+        it.replaceFirstChar { c -> if (c == 'L') "-" else "" }.toInt()
     }
 
     private fun Int.floorMod(other: Int) = (this % other + other) % other
