@@ -4,10 +4,9 @@ package years
 //import adventOfCode.util.*
 //
 //object Solution : Solution<Any>(AOC_YEAR, ) {
-//    override fun getInput(handler: InputHandler):  {
-//    }
+//    override fun getInput(handler: InputHandler) = handler.getInput()
 //
-//    override fun solve(input: ): Pair<Any?, Any?> {
+//    override fun solve(input: Any): Pair<Any?, Any?> {
 //        return Pair(null, null)
 //    }
 //}
