@@ -9,23 +9,48 @@ object Solution02 : Solution<List<PairOf<Long>>>(AOC_YEAR, 2) {
         it.split("-").map(String::toLong).zipWithNext().first()
     }
 
-    private val PairOf<Int>.multiplier get() = ("0".repeat(second - 1) + "1").repeat(first).toLong()
+    private val Long.digits get() = this.toString().length
 
-    private val multiplierCache: MutableMap<Pair<Int, Boolean>, List<Long>> = mutableMapOf()
-    private fun getMultipliers(length: Int, checkFactors: Boolean) = multiplierCache.getOrPut(length to checkFactors) {
-        val range = if (checkFactors) 2..length else 2..2
-        range.filter { length % it == 0 }
-            .map { (it to length / it).multiplier }
+    private fun Long.pow(exponent: Int) = generateSequence { this }
+        .take(exponent)
+        .fold(1L) { acc, elem -> acc * elem }
+
+    private val multiplierCache: MutableMap<PairOf<Int>, Long> = mutableMapOf()
+    private val PairOf<Int>.multiplier get() = multiplierCache.getOrPut(this) { (0..<first).sumOf { 10L.pow(second * it) } }
+
+    private fun sumInvalidIds(a: Long, b: Long, numDigits: Int, length: Int): Long {
+        if (numDigits % length > 0) return 0L
+        val count = numDigits / length
+        val multiplier = (count to length).multiplier
+        val minChunk = if (numDigits > a.digits) 10L.pow(length - 1) else (a + multiplier - 1) / multiplier
+        val maxChunk = if (numDigits < b.digits) 10L.pow(length) - 1 else b / multiplier
+        return multiplier * (maxChunk * (maxChunk + 1) - minChunk * (minChunk - 1)) / 2
     }
 
-    private fun countInvalidIds(start: Long, end: Long, checkFactors: Boolean) = (start..end)
-        .filter { id ->
-            getMultipliers(id.toString().length, checkFactors).any { id % it == 0L }
-        }.sum()
+    private fun sumPairs(a: Long, b: Long, numDigits: Int) = when {
+        numDigits % 2 == 0 -> sumInvalidIds(a, b, numDigits, numDigits / 2)
+        else -> 0L
+    }
+
+    private fun sumRepeats(a: Long, b: Long, numDigits: Int): Long {
+        val factors = (1..numDigits / 2).filter { numDigits % it == 0 }
+        val counts = factors.associateWith { sumInvalidIds(a, b, numDigits, it) }
+        return counts.values.sum() - factors.sumOf { length ->
+            factors.takeWhile { it < length }
+                .filter { length % it == 0 }
+                .sumOf(counts::getValue)
+        }
+    }
 
     override fun solve(input: List<PairOf<Long>>): PairOf<Long> {
-        val ans1 = input.sumOf { countInvalidIds(it.first, it.second, false) }
-        val ans2 = input.sumOf { countInvalidIds(it.first, it.second, true) }
+        var ans1 = 0L
+        var ans2 = 0L
+        input.forEach { (a, b) ->
+            (a.digits..b.digits).forEach {
+                ans1 += sumPairs(a, b, it)
+                ans2 += sumRepeats(a, b, it)
+            }
+        }
         return ans1 to ans2
     }
 }
