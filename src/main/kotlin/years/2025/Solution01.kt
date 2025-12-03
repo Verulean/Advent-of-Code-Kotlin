@@ -1,7 +1,8 @@
 package years.`2025`
 
-import adventOfCode.*
-import adventOfCode.util.*
+import adventOfCode.InputHandler
+import adventOfCode.Solution
+import adventOfCode.util.PairOf
 import kotlin.math.abs
 
 object Solution01 : Solution<List<Int>>(AOC_YEAR, 1) {

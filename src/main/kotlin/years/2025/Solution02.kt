@@ -1,7 +1,8 @@
 package years.`2025`
 
-import adventOfCode.*
-import adventOfCode.util.*
+import adventOfCode.InputHandler
+import adventOfCode.Solution
+import adventOfCode.util.PairOf
 
 object Solution02 : Solution<List<PairOf<Long>>>(AOC_YEAR, 2) {
 
