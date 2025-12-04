@@ -13,16 +13,35 @@ object Solution04 : Solution<Set<Point2D>>(AOC_YEAR, 4) {
 
     private val directions = sequenceOf(-1 to -1, -1 to 0, -1 to 1, 0 to 1, 1 to 1, 1 to 0, 1 to -1, 0 to -1)
 
-    private fun MutableSet<Point2D>.removeRolls(): Int {
-        val toRemove = this.filter { p -> directions.count { p + it in this } < 4 }
-        this.removeAll(toRemove)
-        return toRemove.size
+    private fun MutableSet<Point2D>.pop(): Point2D {
+        val ret = this.first()
+        this.remove(ret)
+        return ret
+    }
+
+    private fun MutableSet<Point2D>.removeRolls() {
+        this.removeAll(this.filter { p -> directions.count { p + it in this } < 4 })
+    }
+
+    private fun MutableSet<Point2D>.removeAllRolls() {
+        val queue = this.toMutableSet()
+        while (queue.isNotEmpty()) {
+            val p = queue.pop()
+            val neighbors = directions.map(p::plus).filter(this::contains).toList()
+            if (neighbors.size < 4) {
+                this.remove(p)
+                queue.addAll(neighbors)
+            }
+        }
     }
 
     override fun solve(input: Set<Point2D>): PairOf<Int> {
         val rolls = input.toMutableSet()
-        val ans1 = rolls.removeRolls()
-        val ans2 = ans1 + generateSequence { rolls.removeRolls() }.takeWhile { it > 0 }.sum()
+        val startingCount = rolls.size
+        rolls.removeRolls()
+        val ans1 = startingCount - rolls.size
+        rolls.removeAllRolls()
+        val ans2 = startingCount - rolls.size
         return ans1 to ans2
     }
 }
