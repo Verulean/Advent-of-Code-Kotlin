@@ -21,18 +21,17 @@ object Solution07 : Solution<Pair<Int, Map<Int, Set<Int>>>>(AOC_YEAR, 7) {
     override fun solve(input: Pair<Int, Map<Int, Set<Int>>>): Pair<Int, Long> {
         val (startIndex, splitterMap) = input
         var ans1 = 0
-        val beams = splitterMap.entries.sortedBy { it.key }.fold(mapOf(startIndex to 1L)) { acc, (_, splitters) ->
-            val newAcc = mutableMapOf<Int, Long>()
-            acc.forEach { (j, count) ->
-                if (j in splitters) {
-                    newAcc.addBeams(j - 1, count)
-                    newAcc.addBeams(j + 1, count)
+        val beams = mutableMapOf(startIndex to 1L)
+        splitterMap.entries.sortedBy { it.key }.forEach { (_, splitters) ->
+            splitters.forEach { j ->
+                val count = beams.getOrDefault(j, 0)
+                if (count > 0) {
+                    beams.addBeams(j - 1, count)
+                    beams.addBeams(j + 1, count)
+                    beams[j] = 0
                     ans1++
-                } else {
-                    newAcc.addBeams(j, count)
                 }
             }
-            newAcc
         }
         return ans1 to beams.values.sum()
     }
