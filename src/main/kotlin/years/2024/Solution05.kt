@@ -4,6 +4,7 @@ import adventOfCode.InputHandler
 import adventOfCode.Solution
 import adventOfCode.util.PairOf
 import adventOfCode.util.ints
+import adventOfCode.util.toPair
 
 private typealias OrderingRule = PairOf<Int>
 private typealias PrinterUpdate = Map<Int, Int>
@@ -12,7 +13,7 @@ object Solution05 : Solution<Pair<Collection<OrderingRule>, Collection<PrinterUp
     override fun getInput(handler: InputHandler): Pair<Collection<OrderingRule>, Collection<PrinterUpdate>> {
         val (first, second) = handler.getInput("\n\n")
         return Pair(
-            first.split("\n").map { it.ints().zipWithNext().single() },
+            first.split("\n").map { it.ints().toPair() },
             second.split("\n").map { it.ints().withIndex().associate { (i, n) -> n to i } }
         )
     }

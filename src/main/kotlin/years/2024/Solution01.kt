@@ -4,11 +4,12 @@ import adventOfCode.InputHandler
 import adventOfCode.Solution
 import adventOfCode.util.PairOf
 import adventOfCode.util.ints
+import adventOfCode.util.toPair
 import kotlin.math.abs
 
 object Solution01 : Solution<PairOf<List<Int>>>(AOC_YEAR, 1) {
     override fun getInput(handler: InputHandler) = handler.getInput(delimiter = "\n")
-        .map { it.ints().zipWithNext().single() }
+        .map { it.ints().toPair() }
         .unzip()
 
     override fun solve(input: PairOf<List<Int>>): PairOf<Int> {

@@ -5,9 +5,10 @@ import adventOfCode.Solution
 import adventOfCode.util.PairOf
 import adventOfCode.util.Point2D
 import adventOfCode.util.plus
+import adventOfCode.util.toPair
 
 object Solution15 : Solution<PairOf<String>>(AOC_YEAR, 15) {
-    override fun getInput(handler: InputHandler) = handler.getInput("\n\n").zipWithNext().single()
+    override fun getInput(handler: InputHandler) = handler.getInput("\n\n").toPair()
 
     private val UP = -1 to 0
     private val RIGHT = 0 to 1

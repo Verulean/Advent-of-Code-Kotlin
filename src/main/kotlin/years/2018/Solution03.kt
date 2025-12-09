@@ -37,7 +37,7 @@ object Solution03 : Solution<List<List<Int>>>(AOC_YEAR, 3) {
             if (!candidates.contains(claimKey)) continue
             if ((i until i + di).all { ii ->
                     (j until j + dj).all { jj ->
-                        tiles[Pair(ii, jj)]!! <= 1
+                        tiles[Pair(ii, jj)] <= 1
                     }
             }) return Pair(ans1, claimKey)
         }

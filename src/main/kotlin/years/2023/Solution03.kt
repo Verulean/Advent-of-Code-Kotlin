@@ -4,6 +4,7 @@ import adventOfCode.InputHandler
 import adventOfCode.Solution
 import adventOfCode.util.PairOf
 import adventOfCode.util.Point2D
+import adventOfCode.util.pop
 
 object Solution03 : Solution<List<String>>(AOC_YEAR, 3) {
     override fun getInput(handler: InputHandler) = handler.getInput("\n")
@@ -11,12 +12,6 @@ object Solution03 : Solution<List<String>>(AOC_YEAR, 3) {
     private fun Char.isSymbol() = !this.isDigit() && this != '.'
 
     private fun Char.isGear() = this == '*'
-
-    private fun MutableSet<Point2D>.pop(): Point2D {
-        val ret = this.first()
-        this.remove(ret)
-        return ret
-    }
 
     override fun solve(input: List<String>): PairOf<Int> {
         val rowIndices = input.indices

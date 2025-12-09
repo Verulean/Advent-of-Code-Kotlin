@@ -5,6 +5,9 @@ typealias TripleOf<T> = Triple<T, T, T>
 typealias Point2D = PairOf<Int>
 typealias Point3D = TripleOf<Int>
 
+val Point2D.x get() = this.first
+val Point2D.y get() = this.second
+
 operator fun Point2D.unaryMinus() = Point2D(-this.first, -this.second)
 
 operator fun Point2D.plus(other: Point2D) = this.first + other.first to this.second + other.second
@@ -24,3 +27,7 @@ operator fun Point3D.plus(other: Point3D) = Point3D(
     this.second + other.second,
     this.third + other.third
 )
+
+val Point3D.x get() = this.first
+val Point3D.y get() = this.second
+val Point3D.z get() = this.third

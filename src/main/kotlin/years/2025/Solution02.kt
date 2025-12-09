@@ -3,11 +3,12 @@ package years.`2025`
 import adventOfCode.InputHandler
 import adventOfCode.Solution
 import adventOfCode.util.PairOf
+import adventOfCode.util.toPair
 
 object Solution02 : Solution<List<PairOf<Long>>>(AOC_YEAR, 2) {
 
     override fun getInput(handler: InputHandler) = handler.getInput(",") {
-        it.split("-").map(String::toLong).zipWithNext().first()
+        it.split("-").map(String::toLong).toPair()
     }
 
     private val Long.digits get() = this.toString().length

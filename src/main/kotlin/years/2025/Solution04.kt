@@ -5,6 +5,7 @@ import adventOfCode.Solution
 import adventOfCode.util.PairOf
 import adventOfCode.util.Point2D
 import adventOfCode.util.plus
+import adventOfCode.util.pop
 
 object Solution04 : Solution<Set<Point2D>>(AOC_YEAR, 4) {
     override fun getInput(handler: InputHandler) = handler.getInput("\n").withIndex().flatMap { (i, row) ->
@@ -12,12 +13,6 @@ object Solution04 : Solution<Set<Point2D>>(AOC_YEAR, 4) {
     }.toSet()
 
     private val directions = sequenceOf(-1 to -1, -1 to 0, -1 to 1, 0 to 1, 1 to 1, 1 to 0, 1 to -1, 0 to -1)
-
-    private fun MutableSet<Point2D>.pop(): Point2D {
-        val ret = this.first()
-        this.remove(ret)
-        return ret
-    }
 
     private fun MutableSet<Point2D>.removeRolls() {
         this.removeAll(this.filter { p -> directions.count { p + it in this } < 4 })

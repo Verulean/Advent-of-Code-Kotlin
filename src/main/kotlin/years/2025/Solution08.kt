@@ -4,6 +4,7 @@ import adventOfCode.InputHandler
 import adventOfCode.Solution
 import adventOfCode.util.PairOf
 import adventOfCode.util.TripleOf
+import adventOfCode.util.combinations
 
 private typealias JunctionBox = TripleOf<Long>
 private typealias Circuit = Set<JunctionBox>
@@ -42,13 +43,11 @@ object Solution08 : Solution<Graph>(AOC_YEAR, 8) {
     private val Graph.isConnected get() = this.values.first().size == this.size
 
     override fun solve(input: Graph): PairOf<Long> {
-        val connections = input.keys.withIndex()
-            .flatMap { (i, u) -> input.keys.drop(i + 1).map(u::to) }
-            .sortedBy { (u, v) -> u.distanceTo(v) }
+        val connections = input.keys.combinations(2).sortedBy { (u, v) -> u.distanceTo(v) }
         connections.take(CONNECTION_COUNT).forEach { (u, v) -> input.connect(u, v) }
         val ans1 = input.circuits.map { it.size.toLong() }.sortedDescending().take(3).reduce(Long::times)
-        val lastConnection = connections.drop(CONNECTION_COUNT).asSequence().takeWhile { !input.isConnected }
+        val lastConnection = connections.drop(CONNECTION_COUNT).takeWhile { !input.isConnected }
             .map { it.also { (u, v) -> input.connect(u, v) } }.last()
-        return ans1 to lastConnection.first.first * lastConnection.second.first
+        return ans1 to lastConnection[0].first * lastConnection[1].first
     }
 }
