@@ -48,7 +48,7 @@ object Solution10 : Solution<List<Machine>>(AOC_YEAR, 10) {
         get(): Int {
             val (_, wirings, joltages) = this
             val context = Context()
-            val solver = context.mkSolver()
+            val solver = context.mkOptimize()
 
             // Build system of equations
             val zero = context.mkInt(0)
@@ -57,25 +57,19 @@ object Solution10 : Solution<List<Machine>>(AOC_YEAR, 10) {
             wirings.withIndex().forEach { (i, button) ->
                 val x = context.mkIntConst("x$i")
                 vars.add(x)
-                solver.add(context.mkGe(x, zero))
+                solver.Add(context.mkGe(x, zero))
                 button.forEach { j -> joltSums[j].add(x) }
             }
             joltages.zip(joltSums).forEach { (n, xs) ->
                 val xSum = context.mkAdd(*xs.toTypedArray())
-                solver.add(context.mkEq(xSum, context.mkInt(n)))
+                solver.Add(context.mkEq(xSum, context.mkInt(n)))
             }
-            val total = context.mkIntConst("total")
-            solver.add(context.mkEq(total, context.mkAdd(*vars.toTypedArray())))
 
             // Minimize solution
-            var ret = Int.MAX_VALUE
-            while (solver.check() == Status.SATISFIABLE) {
-                val count = solver.model.eval(total, true).toString().toInt()
-                solver.add(context.mkLt(total, context.mkInt(count)))
-                ret = min(ret, count)
-            }
-            assert(ret != Int.MAX_VALUE)
-            return ret
+            val total = context.mkAdd(*vars.toTypedArray())
+            solver.MkMinimize(total)
+            assert(solver.Check() == Status.SATISFIABLE)
+            return solver.model.eval(total, true).toString().toInt()
         }
 
     override fun solve(input: List<Machine>): PairOf<Int> {
