@@ -15,7 +15,7 @@ object Solution11 : Solution<ReactorGraph>(AOC_YEAR, 11) {
     private fun ReactorGraph.countPaths(node: String): Int = p1Memo.getOrPut(node) {
         when (node) {
             "out" -> 1
-            else -> this.getOrDefault(node, listOf()).sumOf { this.countPaths(it) }
+            else -> this[node]?.sumOf { this.countPaths(it) } ?: 0
         }
     }
 
@@ -24,9 +24,9 @@ object Solution11 : Solution<ReactorGraph>(AOC_YEAR, 11) {
         p2Memo.getOrPut(Triple(node, dac, fft)) {
             when (node) {
                 "out" -> if (dac && fft) 1 else 0
-                "dac" -> this.getOrDefault(node, listOf()).sumOf { this.countPaths(it, true, fft) }
-                "fft" -> this.getOrDefault(node, listOf()).sumOf { this.countPaths(it, dac, true) }
-                else -> this.getOrDefault(node, listOf()).sumOf { this.countPaths(it, dac, fft) }
+                "dac" -> this[node]?.sumOf { this.countPaths(it, true, fft) } ?: 0
+                "fft" -> this[node]?.sumOf { this.countPaths(it, dac, true) } ?: 0
+                else -> this[node]?.sumOf { this.countPaths(it, dac, fft) } ?: 0
             }
         }
 
