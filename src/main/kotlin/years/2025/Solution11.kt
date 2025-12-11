@@ -20,13 +20,12 @@ object Solution11 : Solution<ReactorGraph>(AOC_YEAR, 11) {
         }
     }
 
-    private fun ReactorGraph.countPaths(steps: Collection<String>) =
-        steps.zipWithNext { node, end -> this.countPaths(node, end) }.reduce(Long::times)
-
     override fun solve(input: ReactorGraph): PairOf<Long> {
         val ans1 = input.countPaths("you", "out")
-        val ans2 = input.countPaths(listOf("svr", "dac", "fft", "out")) +
-            input.countPaths(listOf("svr", "fft", "dac", "out"))
+        val ans2 = when (val dac2fft = input.countPaths("dac", "fft")) {
+            0L -> input.countPaths("svr", "fft") * input.countPaths("fft", "dac") * input.countPaths("dac", "out")
+            else -> input.countPaths("svr", "dac") * dac2fft * input.countPaths("fft", "out")
+        }
         return ans1 to ans2
     }
 }
